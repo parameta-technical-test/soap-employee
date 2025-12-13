@@ -54,14 +54,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Commons del test -->
 		<dependency>
 			<groupId>co.parameta</groupId>
 			<artifactId>technical.test.commons</artifactId>
-			<version>0.0.47</version>
+			<version>0.0.50</version>
 		</dependency>
 
-		<!-- MapStruct -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>

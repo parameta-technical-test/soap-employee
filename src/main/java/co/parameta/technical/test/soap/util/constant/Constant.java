@@ -19,4 +19,14 @@ public final class Constant {
     public static final String YEARS = "years";
     public static final String MONTHS = "months";
     public static final String DAYS = "days";
+    public static final String STATUS_INTERNAL_ERROR = "500";
+
+    public static final String EMPLOYEE_UPDATED_SUCCESSFULLY =
+            "Employee information was updated successfully";
+
+    public static final String EMPLOYEE_ALREADY_EXISTS =
+            "An employee with the same document already exists in the system";
+
+    public static final String UPDATE_NOT_ALLOWED =
+            "Employee already exists and update is not allowed";
 }
