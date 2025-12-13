@@ -3,16 +3,13 @@ package co.parameta.technical.test.soap.endpoint;
 import co.parameta.technical.test.commons.pojo.EmployeeResponsePojo;
 import co.parameta.technical.test.commons.pojo.SaveEmployeeRequestPojo;
 import co.parameta.technical.test.soap.service.ISaveEmployeeService;
-import com.parameta.technical.test.soap.gen.Employee;
-import com.parameta.technical.test.soap.gen.EmployeeResponse;
-import com.parameta.technical.test.soap.gen.SaveEmployeeRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import static co.parameta.technical.test.soap.util.Constant.NAMESPACE_URI;
+import static co.parameta.technical.test.soap.util.constant.Constant.NAMESPACE_URI;
 
 @Endpoint
 @RequiredArgsConstructor

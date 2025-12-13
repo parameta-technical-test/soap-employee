@@ -1,4 +1,4 @@
-package co.parameta.technical.test.soap.util;
+package co.parameta.technical.test.soap.util.helper;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Calendar;
@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public final  class GeneralSoapUtil {
+public final class GeneralSoapUtil {
 
     private GeneralSoapUtil() {
     }
