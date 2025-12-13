@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://parameta.co/technical/test/employee"
+        targetNamespace="http://parameta.co/technical/test/employee"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+
+
+    <xsd:complexType name="TypeDocument">
+        <xsd:sequence>
+            <xsd:element name="code" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Position">
+        <xsd:sequence>
+            <xsd:element name="code" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="AdministratorUser">
+        <xsd:sequence>
+            <xsd:element name="code" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Employee">
+        <xsd:sequence>
+            <xsd:element name="id" type="xsd:int" minOccurs="0"/>
+            <xsd:element name="names" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="lastNames" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="typeDocument" type="tns:TypeDocument" minOccurs="0"/>
+            <xsd:element name="documentNumber" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="dateOfBirth" type="xsd:dateTime" minOccurs="0"/>
+            <xsd:element name="dateAffiliationCompany" type="xsd:dateTime" minOccurs="0"/>
+            <xsd:element name="position" type="tns:Position" minOccurs="0"/>
+            <xsd:element name="salary" type="xsd:decimal" minOccurs="0"/>
+            <xsd:element name="administratorUser" type="tns:AdministratorUser" minOccurs="0"/>
+            <xsd:element name="dateCreate" type="xsd:dateTime" minOccurs="0"/>
+            <xsd:element name="dateUpdate" type="xsd:dateTime" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="EmployeeResponseType">
+        <xsd:sequence>
+            <xsd:element name="status" type="xsd:string"/>
+            <xsd:element name="message" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="employee" type="tns:Employee" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="Employee" type="tns:Employee"/>
+
+    <xsd:element name="SaveEmployeeRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="employee" type="tns:Employee"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="EmployeeResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="response" type="tns:EmployeeResponseType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
