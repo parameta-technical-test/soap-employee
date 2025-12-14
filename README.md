@@ -294,6 +294,6 @@ The build includes **JaCoCo coverage** with a minimum threshold:
 
 ## 👤 Author
 
-**Technical test developed for Parameta**
-Author: **Brahian Alexander Caceres Guevara**
-
+**Brahian Alexander Caceres Guevara**
+GitHub: `bcaceres19`
+Email: `bacg20044@gmail.com`
