@@ -136,7 +136,7 @@ public class ViewAllUserInformationService implements IViewAllUserInformationSer
                                             new Date()
                                     )
                             ),
-                            viewPdf
+                            viewPdf && !GeneralSoapUtil.isNullOrBlank(employeeDTO.getStorageLocationReport())
                                     ? iGetPdfS3Service.getPdf(
                                     employeeDTO.getStorageLocationReport()
                             )
