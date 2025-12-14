@@ -2,7 +2,6 @@ package co.parameta.technical.test.soap.repository;
 
 import co.parameta.technical.test.commons.dto.EmployeeDTO;
 import co.parameta.technical.test.commons.entity.EmployeeEntity;
-import co.parameta.technical.test.commons.pojo.EmployeePojo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -62,5 +61,30 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Intege
             """)
     Integer searchIdEmployee(@Param("documentNumber") String documentNumber, @Param("typeDocument") String typeDocument);
 
+    @Query("""
+        SELECT e
+        FROM EmployeeEntity e
+        WHERE
+          (:idEmployee IS NULL OR e.id = :idEmployee)
+        AND
+          (
+            (:numberDocument IS NULL AND :typeDocument IS NULL)
+            OR
+            (
+              :numberDocument IS NOT NULL
+              AND :typeDocument IS NOT NULL
+              AND e.documentNumber = :numberDocument
+              AND (
+                e.typeDocument.code = :typeDocument
+                OR e.typeDocument.description = :typeDocument
+              )
+            )
+          )
+        """)
+    EmployeeEntity searchAllInformationEmployee(
+            @Param("idEmployee") Integer idEmployee,
+            @Param("numberDocument") String numberDocument,
+            @Param("typeDocument") String typeDocument
+    );
 
 }

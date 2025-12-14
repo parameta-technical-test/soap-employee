@@ -70,3 +70,8 @@ logging:
     org.springframework.ws.soap.server.SoapMessageDispatcher: TRACE
 jwt:
   secret: ${JWT_SECRET}
+
+aws:
+  region: ${AWS_REGION}
+  s3:
+    bucket: ${AWS_NAME_BUCKET}

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication
+@SpringBootApplication()
 @ComponentScan(
 		basePackages = "co.parameta.technical.test"
 )

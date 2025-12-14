@@ -6,7 +6,6 @@
         elementFormDefault="qualified"
         attributeFormDefault="unqualified">
 
-
     <xsd:complexType name="TypeDocument">
         <xsd:sequence>
             <xsd:element name="code" type="xsd:string" minOccurs="0"/>
@@ -24,6 +23,15 @@
     <xsd:complexType name="AdministratorUser">
         <xsd:sequence>
             <xsd:element name="code" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ExtraInformation">
+        <xsd:sequence>
+            <xsd:element name="years" type="xsd:int" minOccurs="0"/>
+            <xsd:element name="months" type="xsd:int" minOccurs="0"/>
+            <xsd:element name="days" type="xsd:int" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -41,6 +49,17 @@
             <xsd:element name="administratorUser" type="tns:AdministratorUser" minOccurs="0"/>
             <xsd:element name="dateCreate" type="xsd:dateTime" minOccurs="0"/>
             <xsd:element name="dateUpdate" type="xsd:dateTime" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="AllInformationEmployee">
+        <xsd:sequence>
+            <xsd:element name="employee" type="tns:Employee" minOccurs="0"/>
+            <xsd:element name="timeLinkedToCompany" type="tns:ExtraInformation" minOccurs="0"/>
+            <xsd:element name="currentAgeEmployee" type="tns:ExtraInformation" minOccurs="0"/>
+            <xsd:element name="informativePdf"
+                         type="xsd:base64Binary"
+                         minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -66,6 +85,24 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="response" type="tns:EmployeeResponseType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="GetAllInformationEmployeeRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="idEmployee" type="xsd:int" minOccurs="0"/>
+                <xsd:element name="typeDocument" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="numberDocument" type="xsd:string" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="GetAllInformationEmployeeResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="data" type="tns:AllInformationEmployee" minOccurs="0"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

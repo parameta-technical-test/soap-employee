@@ -1,10 +1,19 @@
 package co.parameta.technical.test.soap.util.helper;
 
+import co.parameta.technical.test.commons.pojo.AdditionalEmployeeInformationPojo;
+import co.parameta.technical.test.commons.pojo.ExtraInformationPojo;
+import com.parameta.technical.test.soap.gen.ExtraInformation;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+
+import static co.parameta.technical.test.soap.util.constant.Constant.*;
 
 public final class GeneralSoapUtil {
 
@@ -17,49 +26,73 @@ public final class GeneralSoapUtil {
         return xmlGregorianCalendar.toGregorianCalendar().getTime();
     }
 
-    public static Map<String, Integer> diff(Date startDate, Date endDate) {
-
-        Map<String, Integer> result = new HashMap<>();
-        result.put("years", 0);
-        result.put("months", 0);
-        result.put("days", 0);
-
-        if (startDate == null || endDate == null) {
-            return result;
+    public static XMLGregorianCalendar toXMLGregorianCalendar(Date date) {
+        if (date == null) {
+            return null;
         }
 
-        Calendar start = Calendar.getInstance();
-        Calendar end = Calendar.getInstance();
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
 
-        start.setTime(startDate);
-        end.setTime(endDate);
-
-        if (end.before(start)) {
-            Calendar temp = start;
-            start = end;
-            end = temp;
+        try {
+            return DatatypeFactory.newInstance()
+                    .newXMLGregorianCalendar(calendar);
+        } catch (DatatypeConfigurationException e) {
+            throw new IllegalStateException("Error converting Date to XMLGregorianCalendar", e);
         }
-
-        int years = end.get(Calendar.YEAR) - start.get(Calendar.YEAR);
-        int months = end.get(Calendar.MONTH) - start.get(Calendar.MONTH);
-        int days = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH);
-
-        if (days < 0) {
-            end.add(Calendar.MONTH, -1);
-            days += end.getActualMaximum(Calendar.DAY_OF_MONTH);
-            months--;
-        }
-
-        if (months < 0) {
-            months += 12;
-            years--;
-        }
-
-        result.put("years", years);
-        result.put("months", months);
-        result.put("days", days);
-
-        return result;
     }
 
+    public static boolean isNullOrBlank(Object value) {
+        if (value == null) {
+            return true;
+        }
+
+        if (value instanceof String str) {
+            return str.trim().isEmpty();
+        }
+
+        if (value instanceof Collection<?> col) {
+            return col.isEmpty();
+        }
+
+        if (value instanceof Map<?, ?> map) {
+            return map.isEmpty();
+        }
+
+        if(value instanceof Integer val){
+            return val <= 0;
+        }
+
+        return false;
+    }
+
+
+
+
+    public static AdditionalEmployeeInformationPojo buildAdditionalInformation(
+            Map<String, Integer> timeAtCompany,
+            Map<String, Integer> ageEmployee
+    ) {
+        AdditionalEmployeeInformationPojo info = new AdditionalEmployeeInformationPojo();
+        info.setTimeLinkedToCompany(toExtraInformationPojo(timeAtCompany));
+        info.setCurrentAgeEmployee(toExtraInformationPojo(ageEmployee));
+        return info;
+    }
+
+    public static ExtraInformationPojo toExtraInformationPojo(Map<String, Integer> data) {
+        ExtraInformationPojo extra = new ExtraInformationPojo();
+        extra.setYears(data.get(YEARS));
+        extra.setMonths(data.get(MONTHS));
+        extra.setDays(data.get(DAYS));
+        return extra;
+    }
+
+
+    public static ExtraInformation toExtraInformation(Map<String, Integer> data) {
+        ExtraInformation extra = new ExtraInformation();
+        extra.setYears(data.get(YEARS));
+        extra.setMonths(data.get(MONTHS));
+        extra.setDays(data.get(DAYS));
+        return extra;
+    }
 }

@@ -31,19 +31,16 @@
 
 	<dependencies>
 
-		<!-- SOAP (Spring-WS) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web-services</artifactId>
 		</dependency>
 
-		<!-- Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
-		<!-- Persistence -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -57,7 +54,7 @@
 		<dependency>
 			<groupId>co.parameta</groupId>
 			<artifactId>technical.test.commons</artifactId>
-			<version>0.0.50</version>
+			<version>0.0.54</version>
 		</dependency>
 
 		<dependency>
@@ -66,14 +63,12 @@
 			<version>1.6.3</version>
 		</dependency>
 
-		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
 
-		<!-- Tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -93,7 +88,6 @@
 	<build>
 		<plugins>
 
-			<!-- Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -106,7 +100,6 @@
 				</executions>
 			</plugin>
 
-			<!-- Compiler + Annotation processors -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -116,7 +109,6 @@
 					<target>${java.version}</target>
 					<encoding>UTF-8</encoding>
 
-					<!-- útil si quieres @Mapper(componentModel="spring") por defecto -->
 					<compilerArgs>
 						<arg>-Amapstruct.defaultComponentModel=spring</arg>
 					</compilerArgs>
@@ -136,7 +128,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- XSD -> Java (JAXB XJC) -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
@@ -223,9 +214,8 @@
 				<configuration>
 					<excludes>
 						<exclude>**/configuration/**</exclude>
-						<exclude>**/dto/**</exclude>
-						<exclude>**/soap/**</exclude>
-						<exclude>**/AppApplication.java</exclude>
+						<exclude>**/util/**</exclude>
+						<exclude>**/SoapApplication.java</exclude>
 					</excludes>
 				</configuration>
 				<executions>
@@ -254,7 +244,7 @@
 										<limit>
 											<counter>LINE</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0%</minimum>
+											<minimum>80%</minimum>
 										</limit>
 									</limits>
 								</rule>

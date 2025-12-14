@@ -4,6 +4,7 @@ import co.parameta.technical.test.commons.dto.EmployeeDTO;
 import co.parameta.technical.test.commons.dto.SystemParameterDTO;
 import co.parameta.technical.test.commons.pojo.*;
 import co.parameta.technical.test.commons.repository.SystemParameterRepository;
+import co.parameta.technical.test.commons.util.helper.GeneralUtil;
 import co.parameta.technical.test.commons.util.mapper.SystemParameterMapper;
 import co.parameta.technical.test.soap.repository.EmployeeRepository;
 import co.parameta.technical.test.soap.service.ISaveEmployeeService;
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.Map;
 
 import static co.parameta.technical.test.soap.util.constant.Constant.*;
+import static co.parameta.technical.test.soap.util.helper.GeneralSoapUtil.buildAdditionalInformation;
 
 @Service
 @RequiredArgsConstructor
@@ -78,13 +80,13 @@ public class SaveEmployeeService implements ISaveEmployeeService {
         if (!STATUS_INTERNAL_ERROR.equals(responseType.getStatus())) {
 
             Map<String, Integer> timeAtCompany =
-                    GeneralSoapUtil.diff(
+                    GeneralUtil.diff(
                             employeeDTO.getDateAffiliationCompany(),
                             new Date()
                     );
 
             Map<String, Integer> ageEmployee =
-                    GeneralSoapUtil.diff(
+                    GeneralUtil.diff(
                             employeeDTO.getDateOfBirth(),
                             new Date()
                     );
@@ -97,21 +99,5 @@ public class SaveEmployeeService implements ISaveEmployeeService {
         return response;
     }
 
-    private AdditionalEmployeeInformationPojo buildAdditionalInformation(
-            Map<String, Integer> timeAtCompany,
-            Map<String, Integer> ageEmployee
-    ) {
-        AdditionalEmployeeInformationPojo info = new AdditionalEmployeeInformationPojo();
-        info.setTimeLinkedToCompany(toExtraInformation(timeAtCompany));
-        info.setCurrentAgeEmployee(toExtraInformation(ageEmployee));
-        return info;
-    }
 
-    private ExtraInformationPojo toExtraInformation(Map<String, Integer> data) {
-        ExtraInformationPojo extra = new ExtraInformationPojo();
-        extra.setYears(data.get(YEARS));
-        extra.setMonths(data.get(MONTHS));
-        extra.setDays(data.get(DAYS));
-        return extra;
-    }
 }
