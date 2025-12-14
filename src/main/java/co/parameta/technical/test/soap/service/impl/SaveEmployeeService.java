@@ -8,7 +8,6 @@ import co.parameta.technical.test.commons.util.helper.GeneralUtil;
 import co.parameta.technical.test.commons.util.mapper.SystemParameterMapper;
 import co.parameta.technical.test.soap.repository.EmployeeRepository;
 import co.parameta.technical.test.soap.service.ISaveEmployeeService;
-import co.parameta.technical.test.soap.util.helper.GeneralSoapUtil;
 import co.parameta.technical.test.soap.util.mapper.EmployeeMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +105,7 @@ public class SaveEmployeeService implements ISaveEmployeeService {
 
             employeeRepository.save(employeeMapper.toEntity(employeeDTO));
 
-            responseType.setStatus(STATUS_SUCCESS);
+            responseType.setStatus("201");
             responseType.setMessage(EMPLOYEE_SAVED_SUCCESSFULLY);
         }
 

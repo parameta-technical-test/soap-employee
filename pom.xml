@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>co.parameta</groupId>
 			<artifactId>technical.test.commons</artifactId>
-			<version>0.0.55</version>
+			<version>0.0.56</version>
 		</dependency>
 
 		<dependency>
