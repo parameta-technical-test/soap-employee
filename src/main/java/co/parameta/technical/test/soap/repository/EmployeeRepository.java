@@ -8,9 +8,24 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Repository responsible for database operations related to {@link EmployeeEntity}.
+ * <p>
+ * This repository provides both standard CRUD operations and
+ * custom queries for employee validation, update, and information retrieval.
+ */
 @Repository
 public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Integer> {
 
+    /**
+     * Updates employee information only when at least one field value has changed.
+     * <p>
+     * This native query prevents unnecessary updates by comparing current
+     * database values with the incoming {@link EmployeeDTO}.
+     *
+     * @param emp        employee data transfer object containing updated values
+     * @param idEmployee employee identifier
+     */
     @Modifying
     @Query(value = """
         UPDATE technical_test.employee e
@@ -37,8 +52,20 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Intege
              OR e.code_administrator_user <> :#{#emp.administratorUser.code}
           )
         """, nativeQuery = true)
-    void updateInformationEmployee(@Param("emp") EmployeeDTO emp, @Param("idEmployee") Integer idEmployee);
+    void updateInformationEmployee(
+            @Param("emp") EmployeeDTO emp,
+            @Param("idEmployee") Integer idEmployee
+    );
 
+    /**
+     * Checks if an employee exists based on document number and document type.
+     * <p>
+     * The document type can be matched either by code or description.
+     *
+     * @param documentNumber employee document number
+     * @param typeDocument   document type code or description
+     * @return {@code 1} if the employee exists, {@code 0} otherwise
+     */
     @Query(value = """
             SELECT CASE
                      WHEN EXISTS (
@@ -54,13 +81,44 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Intege
                      ELSE 0
                    END AS exists_flag;
             """, nativeQuery = true)
-    int searchEmployeeExistence(@Param("documentNumber")String documentNumber, @Param("typeDocument") String typeDocument);
+    int searchEmployeeExistence(
+            @Param("documentNumber") String documentNumber,
+            @Param("typeDocument") String typeDocument
+    );
 
-    @Query(value = """
-            SELECT e.id FROM EmployeeEntity e where e.documentNumber = :documentNumber and e.typeDocument.code = :typeDocument
+    /**
+     * Retrieves the employee identifier based on document number and document type code.
+     *
+     * @param documentNumber employee document number
+     * @param typeDocument   document type code
+     * @return employee ID if found, otherwise {@code null}
+     */
+    @Query("""
+            SELECT e.id
+            FROM EmployeeEntity e
+            WHERE e.documentNumber = :documentNumber
+              AND e.typeDocument.code = :typeDocument
             """)
-    Integer searchIdEmployee(@Param("documentNumber") String documentNumber, @Param("typeDocument") String typeDocument);
+    Integer searchIdEmployee(
+            @Param("documentNumber") String documentNumber,
+            @Param("typeDocument") String typeDocument
+    );
 
+    /**
+     * Retrieves complete employee information using either:
+     * <ul>
+     *   <li>Employee ID</li>
+     *   <li>Document number and document type</li>
+     * </ul>
+     *
+     * All parameters are optional, but at least one valid filter
+     * must be provided to return a result.
+     *
+     * @param idEmployee     employee identifier (optional)
+     * @param numberDocument employee document number (optional)
+     * @param typeDocument   document type code or description (optional)
+     * @return {@link EmployeeEntity} with full information or {@code null} if not found
+     */
     @Query("""
         SELECT e
         FROM EmployeeEntity e

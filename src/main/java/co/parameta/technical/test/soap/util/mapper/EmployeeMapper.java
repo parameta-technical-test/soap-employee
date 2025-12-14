@@ -15,10 +15,38 @@ import co.parameta.technical.test.soap.util.helper.GeneralSoapUtil;
 import com.parameta.technical.test.soap.gen.*;
 import org.mapstruct.Mapper;
 
-
+/**
+ * Mapper responsible for converting employee data between
+ * SOAP-generated objects, internal POJOs, DTOs, and entities.
+ * <p>
+ * This mapper acts as a bridge between the SOAP contract layer
+ * and the internal domain model, handling:
+ * <ul>
+ *   <li>SOAP {@link EmployeePojo} to internal {@link EmployeeDTO}</li>
+ *   <li>Internal {@link EmployeeDTO} to SOAP {@link EmployeePojo}</li>
+ *   <li>Construction of {@link AllInformationEmployee} SOAP responses</li>
+ * </ul>
+ *
+ * <p>
+ * It also performs safe conversions for dates, nested objects,
+ * and optional values using shared utility classes.
+ * </p>
+ *
+ * <p>Base entity-to-DTO mappings are provided by {@link BaseMapper},
+ * while custom logic is implemented through default methods.</p>
+ */
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper extends BaseMapper<EmployeeEntity, EmployeeDTO> {
 
+    /**
+     * Converts a SOAP {@link EmployeePojo} into an internal {@link EmployeeDTO}.
+     * <p>
+     * This method extracts nested SOAP elements and safely maps them
+     * into DTOs used by the business layer.
+     *
+     * @param employeePojo SOAP employee object
+     * @return mapped {@link EmployeeDTO}
+     */
     default EmployeeDTO pojoToDto(EmployeePojo employeePojo){
         EmployeeDTO employee = new EmployeeDTO();
         employee.setNames(GeneralUtil.get(employeePojo::getNames, ""));
@@ -51,6 +79,15 @@ public interface EmployeeMapper extends BaseMapper<EmployeeEntity, EmployeeDTO> 
         return employee;
     }
 
+    /**
+     * Converts an internal {@link EmployeeDTO} into a SOAP {@link EmployeePojo}.
+     * <p>
+     * Date values are converted into {@link javax.xml.datatype.XMLGregorianCalendar}
+     * to comply with SOAP schema requirements.
+     *
+     * @param dto internal employee DTO
+     * @return SOAP employee POJO
+     */
     default EmployeePojo dtoToPojo(EmployeeDTO dto) {
 
         EmployeePojo employeePojo = new EmployeePojo();
@@ -73,6 +110,7 @@ public interface EmployeeMapper extends BaseMapper<EmployeeEntity, EmployeeDTO> 
         employeePojo.setDateUpdate(
                 GeneralUtil.get(() -> GeneralSoapUtil.toXMLGregorianCalendar(dto.getDateUpdate()), null)
         );
+
         TypeDocumentPojo typeDocumentPojo = new TypeDocumentPojo();
         typeDocumentPojo.setCode(dto.getTypeDocument().getCode());
         typeDocumentPojo.setDescription(dto.getTypeDocument().getDescription());
@@ -90,6 +128,20 @@ public interface EmployeeMapper extends BaseMapper<EmployeeEntity, EmployeeDTO> 
         return employeePojo;
     }
 
+    /**
+     * Builds a complete {@link AllInformationEmployee} SOAP response
+     * combining employee data, calculated time information, and
+     * optional PDF content.
+     *
+     * @param employeePojo employee base information
+     * @param timeAtCompany calculated time linked to company
+     * @param ageEmployee calculated employee age
+     * @param fielPdf optional employee PDF document
+     * @param typeDocument SOAP type document element
+     * @param position SOAP position element
+     * @param administratorUser SOAP administrator user element
+     * @return fully populated {@link AllInformationEmployee}
+     */
     default AllInformationEmployee employeeDTOToAllInformationEmployeePojo(
             EmployeePojo employeePojo,
             ExtraInformation timeAtCompany,
@@ -124,7 +176,6 @@ public interface EmployeeMapper extends BaseMapper<EmployeeEntity, EmployeeDTO> 
         allInformationEmployee.setEmployee(employee);
         allInformationEmployee.setTimeLinkedToCompany(timeAtCompany);
         allInformationEmployee.setCurrentAgeEmployee(ageEmployee);
-
         allInformationEmployee.setInformativePdf(fielPdf);
 
         return allInformationEmployee;

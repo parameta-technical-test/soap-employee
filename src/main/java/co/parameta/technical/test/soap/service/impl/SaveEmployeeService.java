@@ -20,15 +20,48 @@ import java.util.Map;
 import static co.parameta.technical.test.soap.util.constant.Constant.*;
 import static co.parameta.technical.test.soap.util.helper.GeneralSoapUtil.buildAdditionalInformation;
 
+/**
+ * SOAP service responsible for creating or updating employee information.
+ * <p>
+ * This service validates employee existence, applies business rules based on
+ * system parameters, and returns a structured SOAP response including
+ * additional calculated information such as employee age and time at company.
+ */
 @Service
 @RequiredArgsConstructor
 public class SaveEmployeeService implements ISaveEmployeeService {
 
+    /**
+     * Repository used to persist and update employee records.
+     */
     private final EmployeeRepository employeeRepository;
+
+    /**
+     * Mapper used to convert between SOAP POJOs and internal DTOs.
+     */
     private final EmployeeMapper employeeMapper;
+
+    /**
+     * Repository used to retrieve system configuration parameters.
+     */
     private final SystemParameterRepository systemParameterRepository;
+
+    /**
+     * Mapper used to convert system parameter entities to DTOs.
+     */
     private final SystemParameterMapper systemParameterMapper;
 
+    /**
+     * Saves or updates an employee based on existence and system configuration.
+     * <p>
+     * If the employee already exists, the update operation is allowed only
+     * when the corresponding system parameter is enabled.
+     * The response includes calculated additional information when the
+     * operation is successful.
+     *
+     * @param employee SOAP employee request payload
+     * @return SOAP response containing status, message, and additional information
+     */
     @Override
     @Transactional
     public EmployeeResponsePojo saveEmployee(EmployeePojo employee) {
@@ -95,9 +128,8 @@ public class SaveEmployeeService implements ISaveEmployeeService {
                     buildAdditionalInformation(timeAtCompany, ageEmployee);
             responseType.setAdditionalEmployeeInformation(additionalInfo);
         }
+
         response.setResponse(responseType);
         return response;
     }
-
-
 }

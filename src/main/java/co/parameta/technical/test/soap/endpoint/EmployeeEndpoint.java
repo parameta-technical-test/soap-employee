@@ -14,6 +14,18 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import static co.parameta.technical.test.soap.util.constant.Constant.NAMESPACE_URI;
 
+/**
+ * SOAP endpoint responsible for handling employee-related operations.
+ * <p>
+ * This endpoint exposes SOAP operations for:
+ * <ul>
+ *   <li>Employee registration</li>
+ *   <li>Retrieval of complete employee information</li>
+ * </ul>
+ *
+ * Requests are mapped using {@link PayloadRoot} annotations
+ * based on the target namespace and the SOAP operation name.
+ */
 @Endpoint
 @RequiredArgsConstructor
 public class EmployeeEndpoint {
@@ -21,6 +33,16 @@ public class EmployeeEndpoint {
     private final ISaveEmployeeService iSaveEmployeeService;
     private final IViewAllUserInformationService iViewAllUserInformationService;
 
+    /**
+     * Handles the SOAP operation for saving a new employee.
+     * <p>
+     * This operation receives an employee payload, delegates the
+     * persistence and validation logic to the corresponding service,
+     * and returns a structured SOAP response with the execution result.
+     *
+     * @param request SOAP request containing the employee data
+     * @return {@link EmployeeResponsePojo} with status and validation details
+     */
     @PayloadRoot(
             namespace = NAMESPACE_URI,
             localPart = "SaveEmployeeRequest"
@@ -32,6 +54,15 @@ public class EmployeeEndpoint {
         return iSaveEmployeeService.saveEmployee(request.getEmployee());
     }
 
+    /**
+     * Handles the SOAP operation for retrieving all information of an employee.
+     * <p>
+     * This operation queries detailed employee information, including
+     * calculated fields such as current age and time linked to the company.
+     *
+     * @param request SOAP request containing the employee identifier
+     * @return {@link GetAllInformationEmployeeResponse} with full employee details
+     */
     @PayloadRoot(
             namespace = NAMESPACE_URI,
             localPart = "GetAllInformationEmployeeRequest"
@@ -42,6 +73,5 @@ public class EmployeeEndpoint {
     ) {
         return iViewAllUserInformationService.allInformationEmployee(request);
     }
-
 
 }
